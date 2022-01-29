@@ -50,6 +50,8 @@ const initAppRouter = ()=>{
     let {insertedId} = result
     res.send({ok: result.acknowledged, insertedId})
   })
+
+  console.log(`visit http://localhost:${port}`)
 }
 
 mongoClient

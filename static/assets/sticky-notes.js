@@ -1,6 +1,4 @@
-'use strict'
-
-const MountDOM = document.querySelector('#stickyNote')
+const MountDOM = document.querySelector('#stickyNotesApp')
 const APIServer = MountDOM.getAttribute('api')
 
 const doRequest = (method, url, params)=>{
@@ -190,4 +188,4 @@ const StickyNotesPanel = (props)=>{
   )
 }
 
-ReactDOM.render(React.createElement(StickyNotesPanel), MountDOM);
+ReactDOM.render(React.createElement(StickyNotesPanel), MountDOM)
