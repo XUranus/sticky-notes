@@ -8,6 +8,7 @@ const doRequest = (method, url, params)=>{
     let xhr = new XMLHttpRequest()
     xhr.open(method, url, true)
     xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.timeout = 3000
     xhr.onreadystatechange = ()=> {
       if(xhr.readyState == 4 && xhr.status == 200) {
         resolve(eval('(' + xhr.responseText + ')'))
@@ -24,10 +25,10 @@ const doRequest = (method, url, params)=>{
 }
 
 
-const getAllNotes = async () => await doRequest('GET', `${APIServer}/all`)
-const deleteNote = async (id) => await doRequest('GET', `${APIServer}/delete/${id}`)
-const updateNote = async (id, content) => await doRequest('POST', `${APIServer}/update`, {id, content})
-const newNote = async (content) => doRequest('POST', `${APIServer}/new`, {content})
+const getAllNotes   = async ()            => await doRequest('GET',  `${APIServer}/all`)
+const deleteNote    = async (id)          => await doRequest('GET',  `${APIServer}/delete/${id}`)
+const updateNote    = async (id, content) => await doRequest('POST', `${APIServer}/update`, {id, content})
+const newNote       = async (content)     => await doRequest('POST', `${APIServer}/new`, {content})
 
 const MAX_NOTES = 9
 const deepCopy = (e) => eval('('+JSON.stringify(e)+')')
@@ -36,10 +37,26 @@ const {useState, useEffect, useRef} = React
 const Note = (props) => (
   <div className="sticky-note">
     <div className="sticky-tool">
-      {props.data.edited?(<span>*</span>):null}
+      
       <button 
         onClick={()=>props.handleDelete(props.data._id)}
+        title="删除"
         className="sticky-tool-delete"/>
+      <button
+        onClick={()=>props.handleClear(props.data._id)}
+        className="sticky-tool-clear"
+        title="清空"
+      />
+      <button
+        onClick={()=>props.handleCopy(props.data._id)}
+        className="sticky-tool-copy"
+        title="复制"
+      />
+      {props.data.edited?(<div
+        className="sticky-tool-save"
+        title="未保存"
+      />):null}
+
     </div>
     <textarea 
       className="sticky-note-textarea" 
@@ -61,6 +78,8 @@ const AddButton = (props) => (
 )
 
 const StickyNotesPanel = (props)=>{
+  const [loading, setLoading] = useState(true)
+  const [failed, setFailed] = useState(false)
   const [notes, setNotes] = useState([])
   const notesRef = useRef([])
 
@@ -97,9 +116,17 @@ const StickyNotesPanel = (props)=>{
   }
 
   const initAllNotes = async ()=>{
-    let {notes} = await getAllNotes()
-    notes.forEach(note => {note['edited'] = false})
-    setNotes(notes)
+    getAllNotes()
+    .then((result)=>{
+      let {notes} = result
+      notes.forEach(note => {note['edited'] = false})
+      setLoading(false)
+      setNotes(notes)
+    }).catch((err)=>{
+      console.log('get notes failed: ',err)
+      setLoading(false)
+      setFailed(true)
+    })
   }
 
   const addNewNote = async ()=>{
@@ -130,10 +157,35 @@ const StickyNotesPanel = (props)=>{
     }
   }
 
+  const clearNote = (id)=>{
+    let newNotes = deepCopy(notes)
+    let note = newNotes.find(x => x['_id'] == id)
+    note['content'] = ''
+    note['edited'] = true
+    sessionStorage.setItem(id, '')
+    setNotes(newNotes)
+  }
+
+  const copyNote = (id)=>{
+    let content = notes.find(x => x['_id'] == id)['content']
+    navigator.clipboard.writeText(content)
+    alert('已复制到剪贴板')
+  }
+
+  const ready = !loading && !failed
+
   return (
     <div>
-      {notes.map(x=><Note key={x._id} handleChange={onNoteEdit} data={x} handleDelete={onNoteDelete}/>)}
-      {notes.length < MAX_NOTES?<AddButton onClick={addNewNote}/>:null}
+      {loading?<blockquote>便签加载中...</blockquote>:null}
+      {failed?<blockquote>便签加载失败</blockquote>:null}
+      {ready? notes.map(x=><Note 
+                      key={x._id} 
+                      handleChange={onNoteEdit} 
+                      data={x} 
+                      handleClear={clearNote}
+                      handleCopy={copyNote}
+                      handleDelete={onNoteDelete}/>): null}
+      {(ready && notes.length < MAX_NOTES)?<AddButton onClick={addNewNote}/>:null}
     </div>
   )
 }

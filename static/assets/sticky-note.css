@@ -17,26 +17,18 @@
   box-shadow:0 4px 6px rgba(0,0,0,0.1);
 }
 
-.sticky-note:hover { 
-  box-shadow:0 5px 20px rgba(0,0,0,0.15); 
-}
-
-.create-button  { 
-  float:left; 
-  padding:25px 25px 40px;
-  margin:10px;
-  width: 250px;
-  height: 250px;
-}
+.sticky-note:hover { box-shadow:0 5px 20px rgba(0,0,0,0.15); }
 
 .sticky-tool {
   width: 100%;
   height: 20px;
+  padding-bottom: 10px;
+  padding-left: 10px;
 }
 
-.sticky-tool-delete {
+.sticky-tool-copy, .sticky-tool-save, .sticky-tool-clear,.sticky-tool-delete {
   padding: 0;
-  margin: 0;
+  margin: 0 15px 0 0;
   border: 0;
   background-color:  transparent;
   width: 20px;
@@ -44,20 +36,28 @@
   float: right;
 }
 
-.sticky-tool-delete:hover {
-  background: url("delete.png") no-repeat;
+.sticky-tool-copy:hover, .sticky-tool-save:hover,.sticky-tool-clear:hover, .sticky-tool-delete:hover  {
+  box-shadow:0 5px 20px rgba(0,0,0,0.15); 
 }
 
+.sticky-tool-clear {background: url("clear.png") no-repeat;}
+.sticky-tool-save {background: url("load.png") no-repeat;}
+.sticky-tool-copy {background: url("copy.png") no-repeat;}
+.sticky-tool-delete {background: url("delete.png") no-repeat;}
 
 .create-button {
+  float:left; 
+  padding:10px;
+  margin: 10px;
+  width: 250px;
+  height: 250px;
   user-select:none;
-  padding:20px; 
-  border-radius:20px;
+  border-radius:50px;
   text-align:center; 
-  border:15px solid rgba(0,0,0,0.1); 
+  border:30px solid rgba(0,0,0,0.1); 
   cursor:pointer;
   color:rgba(0,0,0,0.1);
-  font:220px "Helvetica", sans-serif;
+  font:300px "Helvetica", sans-serif;
   line-height:185px;
 }
 
