@@ -1,7 +1,7 @@
-import express from 'express'
-import cors from 'cors'
-import { MongoClient, ObjectId } from 'mongodb'
-import 'dotenv/config'
+const express = require('express')
+const cors = require('cors')
+const { MongoClient, ObjectId } = require('mongodb')
+require('dotenv/config')
 
 const app = express()
 const port = process.env['STICKY_NOTES_SERVER_PORT']

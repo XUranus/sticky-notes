@@ -1,14 +1,13 @@
 {
-  "name": "express-demo",
+  "name": "sticky-notes",
   "version": "1.0.0",
   "description": "",
   "main": "sls.js",
   "scripts": {
     "dev": "NODE_ENV=development node app.js"
   },
-  "author": "yugasun",
+  "author": "XUranus",
   "license": "MIT",
-  "type": "module",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^14.3.2",
