@@ -13,8 +13,7 @@ STICKY_NOTES_SERVER_PORT= # Server Port
 STICKY_NOTES_MONGO_URI= # MongoDB connection uri
 ```
 3. `node app.js`
-4. paste code below and change `src` in `<script id="stickyNoteJS/>` to your server uri
+4. paste code below and change `src` in `<script/>` to the server uri of your own
 ```html
-<div id="stickyNotes"></div>
-<script crossorigin id="stickyNotesJS" src="http://${HOST}/assets/sticky-notes.bundle.js"></script>
+<div id="stickyNotes"><script crossorigin src="http://localhost:9000/assets/sticky-notes.bundle.js"></script></div>
 ```
